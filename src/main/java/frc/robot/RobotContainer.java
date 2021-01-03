@@ -8,8 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -25,13 +31,29 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-
+  private SpeedController left1, left2, right1, right2;
+  private SpeedControllerGroup left, right;
+  private DifferentialDrive drive;
+  private static DriveTrain driveTrain;
+  private Joystick joystick;
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
+    left1 = new SteelTalonsController(0, false, 1);
+    left2 = new SteelTalonsController(1, false, 1);
+    right1 = new SteelTalonsController(2, false, 1);
+    right2 = new SteelTalonsController(3, false, 1);
+
+    left = new SpeedControllerGroup(left1, left2);
+    right = new SpeedControllerGroup(right1, right2);
+
+    drive = new DifferentialDrive(left, right);
+    driveTrain = new DriveTrain(left, right, drive);
+    driveTrain.setDefaultCommand(new DriveWithJoystick());
+
     configureButtonBindings();
   }
 
@@ -42,6 +64,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    joystick = new Joystick(0);
+
   }
 
 
@@ -53,5 +77,13 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+  public DriveTrain getDriveTrain(){
+    return driveTrain;
+  }
+
+  public Joystick getJoystick(){
+    return joystick;
   }
 }
