@@ -1,12 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.*;
 
 public class MoveIntake extends CommandBase{
 
     private double speed;
 
-    public MovieIntake(double speed){
+    public MoveIntake(double speed){
         this.speed = speed;
     }
 
@@ -25,7 +26,7 @@ public class MoveIntake extends CommandBase{
         if(speed>0){
             return Robot.m_robotContainer.getJoystick().getRawButtonPressed(Constants.INTAKE_IN_BUTTON);
         }
-        return !return Robot.m_robotContainer.getJoystick().getRawButtonPressed(Constants.INTAKE_IN_BUTTON);
+        return !Robot.m_robotContainer.getJoystick().getRawButtonPressed(Constants.INTAKE_IN_BUTTON);
     }
 
     @Override
